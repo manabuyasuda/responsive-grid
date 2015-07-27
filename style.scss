@@ -1,0 +1,142 @@
+// ==========================================================================
+// Variable
+// ==========================================================================
+
+
+// -----------------------------------------------------------------
+// Base
+// -----------------------------------------------------------------
+
+$base-font-size: 16px !default;
+html { font-size: $base-font-size; }
+* {
+    box-sizing: border-box;
+    &:before,
+    &:after {
+        box-sizing: border-box;
+    }
+}
+
+
+// -----------------------------------------------------------------
+// Media query
+// -----------------------------------------------------------------
+
+$palm: 400px !default;
+$tab: 768px !default;
+$lap: 1024px !default;
+$desk: 1200px !default;
+$below-palm: ($palm - 1px) !default;
+$below-tab: ($tab - 1px) !default;
+$below-lap: ($lap - 1px) !default;
+
+
+// -----------------------------------------------------------------
+// Grid
+// -----------------------------------------------------------------
+
+$grid-max-width: 1200px !default;
+$grid-column: 12 !default;
+$grid-gutter: 14px !default;
+
+
+// ==========================================================================
+// Mixin media query
+// ==========================================================================
+
+@mixin media-query($media-query){
+    @if $media-query == palm{
+        @media only screen and (min-width: $palm) {
+            @content;
+        }
+    }
+
+    @if $media-query == tab{
+        @media only screen and (min-width: $tab) {
+            @content;
+        }
+    }
+
+    @if $media-query == lap{
+        @media only screen and (min-width: $lap) {
+            @content;
+        }
+    }
+
+    @if $media-query == desk{
+        @media only screen and (min-width: $desk) {
+            @content;
+        }
+    }
+
+    @if $media-query == below-palm{
+        @media only screen and (max-width: $below-palm) {
+            @content;
+        }
+    }
+
+    @if $media-query == below-tab{
+        @media only screen and (max-width: $below-tab) {
+            @content;
+        }
+    }
+
+    @if $media-query == below-lap{
+        @media only screen and (max-width: $below-lap) {
+            @content;
+        }
+    }
+}
+
+
+// ==========================================================================
+// Mixin grid system
+// ==========================================================================
+
+@mixin grid-container($max-width: $grid-max-width) {
+    width: 100%;
+    max-width: $max-width;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@mixin grid-row() {
+    display: block;
+    margin: 0;
+    padding: 0;
+    font-size: 0 !important;
+}
+
+@mixin grid-gutter($selector, $value: $grid-gutter) {
+    @if $selector == row {
+        margin-right: - $value;
+        margin-left: - $value;
+    }
+    @else if $selector == column {
+        padding-right: $value;
+        padding-left: $value;
+    }
+}
+
+@mixin grid-base($column: $grid-column, $columns: $grid-column, $vertical-align: top) {
+    display: inline-block;
+    width: percentage($column / $columns);
+    font-size: 1rem;
+    vertical-align: $vertical-align;
+}
+
+@mixin grid-column($column: $grid-column, $columns: $grid-column, $vertical-align: null) {
+    width: percentage($column / $columns);
+    vertical-align: $vertical-align;
+}
+
+@mixin grid-shift($shift, $value, $columns: $grid-column) {
+    @if $shift == push {
+        position: relative;
+        left: percentage($value / $columns);
+    }
+    @else if $shift == pull {
+        position: relative;
+        right: percentage($value / $columns);
+    }
+}
