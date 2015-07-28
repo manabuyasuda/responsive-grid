@@ -35,7 +35,7 @@ $brakpoints: (
 
 @mixin media-query($breakpoint) {
     @if map-has-key($breakpoints, $breakpoint) {
-        @media #{inspect(map-get($breakpoints, $breakpoint))} {
+        @media only screen and #{inspect(map-get($breakpoints, $breakpoint))} {
             @content;
         }
     }
