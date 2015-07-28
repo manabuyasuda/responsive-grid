@@ -17,7 +17,7 @@ html { font-size: $base-font-size; }
 // Map breakpoint
 // -----------------------------------------------------------------
 
-$brakpoints: (
+$breakpoints: (
     'palm': (min-width: 400px),
     'tab': (min-width: 768px),
     'lap': (min-width: 1000px),
