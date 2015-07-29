@@ -4,11 +4,15 @@
 
 $base-font-size: 16px !default;
 html { font-size: $base-font-size; }
-* {
-    box-sizing: border-box;
-    &:before,
-    &:after {
+
+$border-box: true !default;
+@if $border-box == true {
+    * {
         box-sizing: border-box;
+        &:before,
+        &:after {
+            box-sizing: border-box;
+        }
     }
 }
 
@@ -59,6 +63,46 @@ $grid-gutter: 14px !default;
 // Mixin grid system
 // ==========================================================================
 
+// e.g. two column layout(`aside` is arranged on the left)
+//
+// .l-container {
+//     @include grid-container;
+// }
+// .l-row {
+//     @include grid-row;
+//     @include grid-gutter(row);
+// }
+// article {
+//     @include grid-base;
+//     @include grid-gutter(column);
+//     @include media-query(tab) {
+//         @include grid-column(8);
+//         @include grid-shift(push, 4);
+//     }
+// }
+// aside {
+//     @include grid-base;
+//     @include grid-gutter(column);
+//     @include media-query(tab) {
+//         @include grid-column(4);
+//         @include grid-shift(pull, 8);
+//     }
+// }
+//
+// e.g. Side-by-side list(such as Block-Grid of Foundation)
+// .block-grid {
+//     @include grid-row;
+//     @include grid-gutter(row, 2%);
+//     > li {
+//         @include grid-base(6);
+//         @include grid-gutter(over-all, 2%);
+//         @include media-query(tab) {
+//             @include grid-column(4);
+//         }
+//     }
+// }
+//
+
 @mixin grid-container($max-width: $grid-max-width) {
     width: 100%;
     max-width: $max-width;
@@ -73,19 +117,25 @@ $grid-gutter: 14px !default;
     font-size: 0 !important;
 }
 
-@mixin grid-gutter($selector, $value: $grid-gutter) {
-    @if $selector == row {
+@mixin grid-gutter($type, $value: $grid-gutter) {
+    @if $type == row {
         margin-right: - $value;
         margin-left: - $value;
     }
-    @else if $selector == column {
+    @if $type == column {
         padding-right: $value;
         padding-left: $value;
+    }
+    @if $type == over-all {
+        padding: $value;
     }
 }
 
 @mixin grid-base($column: $grid-column, $columns: $grid-column, $vertical-align: top) {
     display: inline-block;
+    @if $border-box == false {
+        box-sizing: border-box;
+    }
     width: percentage($column / $columns);
     font-size: 1rem;
     vertical-align: $vertical-align;
@@ -96,13 +146,13 @@ $grid-gutter: 14px !default;
     vertical-align: $vertical-align;
 }
 
-@mixin grid-shift($shift, $value, $columns: $grid-column) {
-    @if $shift == push {
+@mixin grid-shift($type, $column, $columns: $grid-column) {
+    @if $type == push {
         position: relative;
-        left: percentage($value / $columns);
+        left: percentage($column / $columns);
     }
-    @else if $shift == pull {
+    @else if $type == pull {
         position: relative;
-        right: percentage($value / $columns);
+        right: percentage($column / $columns);
     }
 }
